@@ -10,16 +10,24 @@ class BooksApp extends React.Component {
     super(props);
     this.state = {
       allBooks: [],
-      currentlyReadBooks: [],
-      readBooks: [],
-      wantToReadBooks: []
+      currentlyShelf: [],
+      readShelf: [],
+      wantToReadShelf: []
     };
   }
+
   componentDidMount() {
     BooksAPI.getAll().then(books => {
+      this.setState(() => ({
+        allBooks: books,
+        currentlyShelf: books.filter(book => book.shelf === "currentlyReading"),
+        wantToReadShelf: books.filter(book => book.shelf === "wantToRead"),
+        readShelf: books.filter(book => book.shelf === "read")
+      }));
       console.log(books);
     });
   }
+
   render() {
     return (
       <div className="app">
@@ -34,9 +42,9 @@ class BooksApp extends React.Component {
                 path="/"
                 render={() => (
                   <>
-                    <Bookshelf />
-                    <Bookshelf />
-                    <Bookshelf />
+                    <Bookshelf books={this.state.currentlyShelf} />
+                    <Bookshelf books ={this.state.wantToReadShelf}/>
+                    <Bookshelf books = {this.state.readShelf}/>
                     <Link to="/search/" className="open-search">
                       <button>Add a book</button>
                     </Link>
