@@ -10,22 +10,64 @@ class BooksApp extends React.Component {
     super(props);
     this.state = {
       allBooks: [],
-      currentlyShelf: [],
-      readShelf: [],
-      wantToReadShelf: []
+      searchedBooks: []
     };
+    this.updateShelf = this.updateShelf.bind(this);
+    this.updateBookShelf = this.updateBookShelf.bind(this);
+    this.search = this.search.bind(this);
+    this.getBook = this.getBook.bind(this);
   }
 
   componentDidMount() {
     BooksAPI.getAll().then(books => {
-      this.setState(() => ({
-        allBooks: books,
-        currentlyShelf: books.filter(book => book.shelf === "currentlyReading"),
-        wantToReadShelf: books.filter(book => book.shelf === "wantToRead"),
-        readShelf: books.filter(book => book.shelf === "read")
-      }));
-      console.log(books);
+      this.updateShelf(books);
     });
+  }
+
+  updateShelf(newAllBooks) {
+    this.setState(currState => ({ allBooks: newAllBooks }));
+  }
+  async updateBookShelf(book, shelf) {
+    const newBook = await BooksAPI.update(book, shelf);
+    let isSearch = false;
+    const newAllBooks = this.state.allBooks.map(b => {
+      if (b.title === book.title) {
+        isSearch = true;
+        return { ...book, shelf: shelf };
+      }
+      return b;
+    });
+    if (isSearch) this.updateShelf(newAllBooks);
+    else this.updateShelf([...newAllBooks, { ...book, shelf: shelf }]);
+  }
+
+  async search(query) {
+    try {
+      const books = await BooksAPI.search(query);
+      if (!books.error) {
+        let newSearchedBooks = books.map(b => {
+          return b;
+        });
+
+        // Get the information of the shelf
+        newSearchedBooks = newSearchedBooks.map(b =>
+          this.getBook(b.id).then(book => book)
+        );
+
+        // Convert an array of promises
+        newSearchedBooks = await Promise.all(newSearchedBooks);
+        this.setState(currentState => ({
+          searchedBooks: newSearchedBooks
+        }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getBook(id) {
+    const book = await BooksAPI.get(id);
+    return book;
   }
 
   render() {
@@ -42,18 +84,50 @@ class BooksApp extends React.Component {
                 path="/"
                 render={() => (
                   <>
-                    <Bookshelf books={this.state.currentlyShelf} />
-                    <Bookshelf books ={this.state.wantToReadShelf}/>
-                    <Bookshelf books = {this.state.readShelf}/>
+                    <Bookshelf
+                      heading={"Currently Reading"}
+                      books={this.state.allBooks.filter(
+                        book => book.shelf === "currentlyReading"
+                      )}
+                      updateBookShelf={this.updateBookShelf}
+                    />
+                    <Bookshelf
+                      heading={"Want to Read"}
+                      books={this.state.allBooks.filter(
+                        book => book.shelf === "wantToRead"
+                      )}
+                      updateBookShelf={this.updateBookShelf}
+                    />
+                    <Bookshelf
+                      heading={"Read"}
+                      books={this.state.allBooks.filter(
+                        book => book.shelf === "read"
+                      )}
+                      updateBookShelf={this.updateBookShelf}
+                    />
                     <Link to="/search/" className="open-search">
-                      <button>Add a book</button>
+                      <button onClick={this.handleClick}>Add a book</button>
                     </Link>
                   </>
                 )}
               />
             </div>
           </div>
-          <Route exact path="/search" component={Search} />
+          <Route
+            exact
+            path="/search"
+            render={() => (
+              <>
+                <Search search={this.search}>
+                  <Bookshelf
+                    heading={"Search Books"}
+                    books={this.state.searchedBooks}
+                    updateBookShelf={this.updateBookShelf}
+                  />
+                </Search>
+              </>
+            )}
+          />
         </div>
       </div>
     );
