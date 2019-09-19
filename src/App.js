@@ -28,7 +28,7 @@ class BooksApp extends React.Component {
     this.setState(currState => ({ allBooks: newAllBooks }));
   }
   async updateBookShelf(book, shelf) {
-    const newBook = await BooksAPI.update(book, shelf);
+    await BooksAPI.update(book, shelf);
     let isSearch = false;
     const newAllBooks = this.state.allBooks.map(b => {
       if (b.title === book.title) {

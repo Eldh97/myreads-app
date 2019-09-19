@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { search } from "./BooksAPI";
 
 class Book extends Component {
   constructor(props) {
@@ -13,7 +12,7 @@ class Book extends Component {
   }
   generateOptions() {}
   render() {
-    const { authors, title, imageLinks, shelf, id } = this.props.book;
+    const { authors, title, imageLinks, shelf } = this.props.book;
 
     return (
       <li>
