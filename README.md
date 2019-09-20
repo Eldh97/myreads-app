@@ -1,10 +1,18 @@
-# React Nanodegree Project #1: MyReads App 
+# React Nanodegree Project #1: MyReads App
 
-A react application to fetch and track the desired books.
+**MyReads** App is a react application to search and track books based on title or authors.
 
-## Usage
+## Installation
+
 ```bash
 npm install
-npm start 
+npm start
 ```
 
+## License
+
+MyReads app is under MIT license.
+
+## Additional Information
+
+[Udacity React Nanodegree](https://www.udacity.com/course/react-nanodegree--nd019)
