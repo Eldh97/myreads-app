@@ -10,7 +10,8 @@ class BooksApp extends React.Component {
     super(props);
     this.state = {
       allBooks: [],
-      searchedBooks: []
+      searchedBooks: [],
+      queryError: false
     };
     this.updateShelf = this.updateShelf.bind(this);
     this.updateBookShelf = this.updateBookShelf.bind(this);
@@ -43,25 +44,28 @@ class BooksApp extends React.Component {
 
   async search(query) {
     try {
+      if (query.trim() === "") throw Error("Not Found");
       const books = await BooksAPI.search(query);
-      if (!books.error) {
-        let newSearchedBooks = books.map(b => {
-          return b;
-        });
+      let newSearchedBooks = books.map(b => {
+        return b;
+      });
 
-        // Get the information of the shelf
-        newSearchedBooks = newSearchedBooks.map(b =>
-          this.getBook(b.id).then(book => book)
-        );
+      // Get the information of the shelf
+      newSearchedBooks = newSearchedBooks.map(b =>
+        this.getBook(b.id).then(book => book)
+      );
 
-        // Convert an array of promises
-        newSearchedBooks = await Promise.all(newSearchedBooks);
-        this.setState(currentState => ({
-          searchedBooks: newSearchedBooks
-        }));
-      }
+      // Convert an array of promises
+      newSearchedBooks = await Promise.all(newSearchedBooks);
+
+      this.setState(currentState => ({
+        searchedBooks: newSearchedBooks,
+        queryError: false
+      }));
     } catch (error) {
-      console.log(error);
+      if (!this.state.queryError) {
+        this.setState({ searchedBooks: [], queryError: true });
+      }
     }
   }
 
@@ -106,7 +110,7 @@ class BooksApp extends React.Component {
                       updateBookShelf={this.updateBookShelf}
                     />
                     <Link to="/search/" className="open-search">
-                      <button onClick={this.handleClick}>Add a book</button>
+                      <button>Add a book</button>
                     </Link>
                   </>
                 )}
@@ -119,11 +123,15 @@ class BooksApp extends React.Component {
             render={() => (
               <>
                 <Search search={this.search}>
-                  <Bookshelf
-                    heading={"Search Books"}
-                    books={this.state.searchedBooks}
-                    updateBookShelf={this.updateBookShelf}
-                  />
+                  {!this.state.queryError ? (
+                    <Bookshelf
+                      heading={"Search Books"}
+                      books={this.state.searchedBooks}
+                      updateBookShelf={this.updateBookShelf}
+                    />
+                  ) : (
+                    <h2 style={{ textAlign: "center" }}>Not Found</h2>
+                  )}
                 </Search>
               </>
             )}
