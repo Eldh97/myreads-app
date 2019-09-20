@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-class CreateBook extends Component {
+class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,16 +10,16 @@ class CreateBook extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  componentDidUpdate() {
-    if (this.state.query) this.props.search(this.state.query);
-  }
   handleChange(event) {
-    const value = event.target.value.trim();
-    this.setState({ query: value });
+    const value = event.target.value;
+    this.setState(() => {
+      if (value.trim()) this.props.search(value);
+      return { query: value };
+    });
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.props.search(this.state.query);
+    if (this.state.query) this.props.search(this.state.query.trim());
   }
   render() {
     return (
@@ -45,4 +45,4 @@ class CreateBook extends Component {
   }
 }
 
-export default CreateBook;
+export default Search;
