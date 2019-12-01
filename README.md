@@ -11,7 +11,7 @@ npm start
 ## Screenshots
 ![screenshot 1](src/img/s33.png) 
 
-![screenshot 2](src/img/22.png)
+![screenshot 2](src/img/s22.png)
 
 ![screenshot 3](src/img/s11.png)
 
