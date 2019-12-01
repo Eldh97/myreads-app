@@ -9,7 +9,7 @@ npm install
 npm start
 ```
 ## Screenshots
-![screenshot 1](src/img/s1.png)
+![screenshot 1](src/img/s1.png) 
 
 ![screenshot 2](src/img/s2.png)
 
