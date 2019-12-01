@@ -2,11 +2,17 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 class Search extends Component {
+  state = {
+    
+  }
+
+  
   constructor(props) {
     super(props);
     this.state = {
       query: ""
     };
+    // explicit binding 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -16,7 +22,7 @@ class Search extends Component {
       if (value.trim()) this.props.search(value);
       return { query: value };
     });
-  }
+  } 
   handleSubmit(event) {
     event.preventDefault();
     if (this.state.query) this.props.search(this.state.query.trim());
