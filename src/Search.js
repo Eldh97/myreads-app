@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useHistory } from "react-router-dom";
+import { FiChevronLeft } from "react-icons/fi"
 class Search extends Component {
   state = {
-    
+
   }
 
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -22,17 +22,17 @@ class Search extends Component {
       if (value.trim()) this.props.search(value);
       return { query: value };
     });
-  } 
+  }
   handleSubmit(event) {
     event.preventDefault();
     if (this.state.query) this.props.search(this.state.query.trim());
   }
   render() {
     return (
-      <div className="search-books">
-        <div className="search-books-bar">
-          <Link to="/" className="close-search">
-            Close
+      <div className="search-books ">
+        <div className="search-books-bar items-center">
+          <Link className="text-white text-xl p-4" to="/">
+            <FiChevronLeft className="text-3xl cursor-pointer" />
           </Link>
           <div className="search-books-input-wrapper">
             <form onSubmit={this.handleSubmit}>

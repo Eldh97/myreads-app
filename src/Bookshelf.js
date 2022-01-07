@@ -8,7 +8,7 @@ const Bookshelf = ({ heading, books, updateBookShelf }) => {
 
   return (
     <div className="bookshelf">
-      <h2 className="bookshelf-title">{heading}</h2>
+      <h2 className="bookshelf-title text-xl font-semibold">{heading}</h2>
       <div className="bookshelf-books">
         <ol className="books-grid">{renderedBooks}</ol>
       </div>

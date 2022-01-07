@@ -70,7 +70,7 @@ body, .app {
 }
 
 .open-search button:hover {
-  background-color: rgb(0, 102, 0);
+  background-color: #be123c;
 }
 
 
@@ -112,10 +112,11 @@ body, .app {
   font-size: 0;
   border: none;
   outline: none;
+  color: white;
 }
 
 button:active {
-  border: red;
+  border: #be123c;
   outline: none;
 }
 
@@ -170,7 +171,7 @@ button:active {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #60ac5d;
+  background: #be123c;
   background-image: url('./icons/arrow-drop-down.svg');
   background-repeat: no-repeat;
   background-position: center;

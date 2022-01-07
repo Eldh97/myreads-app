@@ -4,7 +4,7 @@ import "./App.css";
 import Bookshelf from "./Bookshelf";
 import { Route, Link } from "react-router-dom";
 import Search from "./Search";
-
+import { BsBook } from "react-icons/bs"
 class BooksApp extends React.Component {
   constructor(props) {
     super(props);
@@ -79,8 +79,11 @@ class BooksApp extends React.Component {
       <div className="app">
         <div className="list-books">
           <div className="list-books-content">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
+            <div className="p-4 text-center text-white mb-10 from-pink-600 w-full to-red-800 bg-gradient-to-l">
+              <h1 className="text-2xl font-bold flex items-center justify-center">
+                <BsBook className="mr-4" />
+                <span>Books Cafe</span>
+              </h1>
             </div>
             <div>
               <Route
@@ -109,8 +112,9 @@ class BooksApp extends React.Component {
                       )}
                       updateBookShelf={this.updateBookShelf}
                     />
-                    <Link to="/search/" className="open-search">
-                      <button>Add a book</button>
+                    <Link to="/search/" className="fixed bottom-3 right-3 rounded-full shadow-2xl from-pink-600 
+                     to-red-800 bg-gradient-to-l text-white w-14 h-14 flex items-center justify-center text-2xl font-bold ">
+                      <button>+</button>
                     </Link>
                   </>
                 )}
